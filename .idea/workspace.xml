@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="369f7202-8c81-4cdc-b5b0-a63940eafd3f" name="Default Changelist" comment="" />
+    <list default="true" id="369f7202-8c81-4cdc-b5b0-a63940eafd3f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gopkg.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Gopkg.toml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +21,10 @@
   <component name="GOROOT" path="/usr/lib/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GoDepProject">
+    <integration-enabled>true</integration-enabled>
+    <exec-path>/usr/bin/dep</exec-path>
   </component>
   <component name="ProjectId" id="1SOCtjUx4JvDml0M5R4d8nQnTVt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
