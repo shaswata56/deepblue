@@ -2,28 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="369f7202-8c81-4cdc-b5b0-a63940eafd3f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gopkg.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gopkg.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gopkg.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Gopkg.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/actions.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/all.bash" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/ca.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/certs.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/chunked.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/counterecryptor.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/ctx.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/dispatcher.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/doc.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/https.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/key.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/proxy.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/responses.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/gopkg.in/elazarl/goproxy.v1/signer.go" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

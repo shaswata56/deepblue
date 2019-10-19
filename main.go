@@ -1,100 +1,73 @@
 package main
 
 import (
-	"flag"
-	"io"
+	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"net/http/httputil"
 	"os"
-	"strings"
+	"syscall"
 )
 
-var hopHeaders = []string{
-	"Connection",
-	"Keep-Alive",
-	"Proxy-Authenticate",
-	"Proxy-Authorization",
-	"Te", // canonicalized version of "TE"
-	"Trailers",
-	"Transfer-Encoding",
-	"Upgrade",
-}
+//SetSocketOptions functions sets IP_TRANSPARENT flag on given socket (c syscall.RawConn)
+func SetSocketOptions(network string, address string, c syscall.RawConn) error {
 
-func copyHeader(dst, src http.Header) {
-	for k, vv := range src {
-		for _, v := range vv {
-			dst.Add(k, v)
+	var fn = func(s uintptr) {
+		var setErr error
+		var getErr error
+		setErr = syscall.SetsockoptInt(int(s), syscall.SOL_IP, syscall.IP_TRANSPARENT, 1)
+		if setErr != nil {
+			log.Fatal(setErr)
 		}
+
+		val, getErr := syscall.GetsockoptInt(int(s), syscall.SOL_IP, syscall.IP_TRANSPARENT)
+		if getErr != nil {
+			log.Fatal(getErr)
+		}
+		log.Printf("value of IP_TRANSPARENT option is: %d", int(val))
 	}
-}
-
-func delHopHeaders(header http.Header) {
-	for _, h := range hopHeaders {
-		header.Del(h)
-	}
-}
-
-func appendHostToXForwardHeader(header http.Header, host string) {
-	// If we aren't the first proxy retain prior
-	// X-Forwarded-For information as a comma+space
-	// separated list and fold multiple headers into one.
-	if prior, ok := header["X-Forwarded-For"]; ok {
-		host = strings.Join(prior, ", ") + ", " + host
-	}
-	header.Set("X-Forwarded-For", host)
-}
-
-type proxy struct {
-}
-
-func (p *proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
-	log.Println(req.RemoteAddr, " ", req.Method, " ", req.URL)
-
-	if req.URL.Scheme != "http" && req.URL.Scheme != "https" {
-		msg := "unsupported protocal scheme "+req.URL.Scheme
-		http.Error(wr, msg, http.StatusBadRequest)
-		log.Println(msg)
-		return
+	if err := c.Control(fn); err != nil {
+		return err
 	}
 
-	client := &http.Client{}
+	return nil
 
-	//http: Request.RequestURI can't be set in client requests.
-	//http://golang.org/src/pkg/net/http/client.go
-	req.RequestURI = ""
-
-	delHopHeaders(req.Header)
-
-	if clientIP, _, err := net.SplitHostPort(req.RemoteAddr); err == nil {
-		appendHostToXForwardHeader(req.Header, clientIP)
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		http.Error(wr, "Server Error", http.StatusInternalServerError)
-		log.Fatal("ServeHTTP:", err)
-	}
-	defer resp.Body.Close()
-
-	log.Println(req.RemoteAddr, " ", resp.Status)
-
-	delHopHeaders(resp.Header)
-
-	copyHeader(wr.Header(), resp.Header)
-	wr.WriteHeader(resp.StatusCode)
-	_, _ = io.Copy(wr, resp.Body)
 }
 
 func main() {
 	port := os.Getenv("PORT")
-	var addr = flag.String("addr", "0.0.0.0:"+port, "The addr of the application.")
-	flag.Parse()
+	http.HandleFunc("/", TransparentHttpProxy)
 
-	handler := &proxy{}
+	// here we are creating custom listener with transparent socket, possible with Go 1.11+
+	lc := net.ListenConfig{Control: SetSocketOptions}
+	listener, _ := lc.Listen(context.Background(), "tcp", ":")
 
-	log.Println("Starting proxy server on", *addr)
-	if err := http.ListenAndServe(*addr, handler); err != nil {
-		log.Fatal("ListenAndServe:", err)
+	log.Printf("Starting http proxy")
+	log.Fatal(http.Serve(listener, nil))
+
+}
+
+func TransparentHttpProxy(w http.ResponseWriter, r *http.Request) {
+
+	director := func(target *http.Request) {
+		target.URL.Scheme = "http"
+		target.URL.Path = r.URL.Path
+		target.Header.Set("Pass-Via-Go-Proxy", "1")
+		/*
+			Line below of this comment this is the quite tricky part of the configuration,
+			necessary to make transparent proxy working.
+
+			From http.LocalAddrContextKey we can get address:port destination of client requst.
+			In fact address:port values from http.LocalAddrContextKey,
+			are the values from socket dynamicly created by tproxy.
+			This will be used to create a connection between the proxy and the destination,
+			to which the client request will be pass.
+		*/
+		target.URL.Host = fmt.Sprint(r.Context().Value(http.LocalAddrContextKey))
 	}
+	proxy := &httputil.ReverseProxy{Director: director}
+	proxy.ServeHTTP(w, r)
+
 }
