@@ -42,7 +42,7 @@ func main() {
 
 	// here we are creating custom listener with transparent socket, possible with Go 1.11+
 	lc := net.ListenConfig{Control: SetSocketOptions}
-	listener, _ := lc.Listen(context.Background(), "tcp", ":")
+	listener, _ := lc.Listen(context.Background(), "tcp", ":"+port)
 
 	log.Printf("Starting http proxy")
 	log.Fatal(http.Serve(listener, nil))
