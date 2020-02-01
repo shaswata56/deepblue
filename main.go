@@ -1,73 +1,121 @@
 package main
 
 import (
-	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
-	"net"
+	"math/rand"
 	"net/http"
-	"net/http/httputil"
-	"os"
-	"syscall"
+	"strconv"
+	"time"
 )
 
-//SetSocketOptions functions sets IP_TRANSPARENT flag on given socket (c syscall.RawConn)
-func SetSocketOptions(network string, address string, c syscall.RawConn) error {
+type User struct {
+	Id    		 string `json:"id"`
+	Connection   bool   `json:"connection"`
+	Point 		 int    `json:"point"`
+}
 
-	var fn = func(s uintptr) {
-		var setErr error
-		var getErr error
-		setErr = syscall.SetsockoptInt(int(s), syscall.SOL_IP, syscall.IP_TRANSPARENT, 1)
-		if setErr != nil {
-			log.Fatal(setErr)
+var userCSV []int
+var users	[]User
+
+func randomIdGenerator(n int) []int {
+	var rands []int
+	seed := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(seed)
+	for i := 0; i < n; i++ {
+		for {
+			up:
+			num := random.Intn(999999)
+			if num > 99999 {
+				for j := 0; j < len(rands); j++ {
+					if rands[j] == num {
+						goto up
+					}
+				}
+				fmt.Println(num)
+				rands = append(rands, num)
+				break
+			}
+
 		}
-
-		val, getErr := syscall.GetsockoptInt(int(s), syscall.SOL_IP, syscall.IP_TRANSPARENT)
-		if getErr != nil {
-			log.Fatal(getErr)
-		}
-		log.Printf("value of IP_TRANSPARENT option is: %d", int(val))
 	}
-	if err := c.Control(fn); err != nil {
-		return err
-	}
-
-	return nil
-
+	return rands
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	http.HandleFunc("/", TransparentHttpProxy)
-
-	// here we are creating custom listener with transparent socket, possible with Go 1.11+
-	lc := net.ListenConfig{Control: SetSocketOptions}
-	listener, _ := lc.Listen(context.Background(), "tcp", ":"+port)
-
-	log.Printf("Starting http proxy")
-	log.Fatal(http.Serve(listener, nil))
-
+	var n int
+	_, _ = fmt.Scanf("%d", &n)
+	userCSV = randomIdGenerator(n)
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/", Index)
+	router.HandleFunc("/users", ConnectedUsers)
+	router.HandleFunc("/user/{userId}", GetConnected)
+	router.HandleFunc("/user/{userId}/{newPoint}", ChangePoint)
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
-func TransparentHttpProxy(w http.ResponseWriter, r *http.Request) {
-
-	director := func(target *http.Request) {
-		target.URL.Scheme = "http"
-		target.URL.Path = r.URL.Path
-		target.Header.Set("Pass-Via-Go-Proxy", "1")
-		/*
-			Line below of this comment this is the quite tricky part of the configuration,
-			necessary to make transparent proxy working.
-
-			From http.LocalAddrContextKey we can get address:port destination of client requst.
-			In fact address:port values from http.LocalAddrContextKey,
-			are the values from socket dynamicly created by tproxy.
-			This will be used to create a connection between the proxy and the destination,
-			to which the client request will be pass.
-		*/
-		target.URL.Host = fmt.Sprint(r.Context().Value(http.LocalAddrContextKey))
+func ChangePoint(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userId := vars["userId"]
+	newPoint := vars["newPoint"]
+	for i := 0; i < len(users); i++ {
+		if userId == users[i].Id {
+			var err error
+			users[i].Point, err = strconv.Atoi(newPoint)
+			if err != nil {
+				fmt.Println("[Control Panel] Error detected on line 53!")
+				_, _ = fmt.Fprint(w, "Not Updated")
+				return
+			}
+			_, _ = fmt.Fprint(w, "Updated")
+			return
+		}
 	}
-	proxy := &httputil.ReverseProxy{Director: director}
-	proxy.ServeHTTP(w, r)
+	_, _ = fmt.Fprint(w, "Unauthorized")
+}
 
+func GetConnected(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userId := vars["userId"]
+	for i := 0; i < len(userCSV); i++ {
+		str := strconv.Itoa(userCSV[i])
+		if userId == str {
+			conUser := User{
+				Id:    userId,
+				Connection:   true,
+				Point: 100,
+			}
+			checkExist := false
+			for j := 0; j < len(users); j++ {
+				if users[j] == conUser {
+					users[j].Point = 100
+					users[j].Connection = true
+					checkExist = true
+				}
+			}
+			if !checkExist {
+				users = append(users, conUser)
+			}
+			_, _ = fmt.Fprint(w, "Authorized")
+			return
+		}
+	}
+	_, _ = fmt.Fprint(w, "Unauthorized")
+}
+
+func ConnectedUsers(w http.ResponseWriter, _ *http.Request) {
+	jm, err := json.Marshal(users)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(jm)
+}
+
+func Index(w http.ResponseWriter, _ *http.Request) {
+	_, _ = fmt.Fprint(w, "<h1><center>" +
+		"<b>Control Panel Index</b></center></h1>")
 }
