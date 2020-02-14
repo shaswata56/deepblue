@@ -1,4 +1,4 @@
-package deepblue
+package main
 
 import (
 	"encoding/json"
@@ -53,18 +53,18 @@ func randomIdGenerator(n int) []int {
 	return rands
 }
 
-func Init(n, port, scale int) {
+func Init(n, port int) {
 	var lc Cluster
 	userCSV = randomIdGenerator(n)
 	master := GetMasterNode(port)
 	lc = append(lc, *master)
 
-	for i := 0; i < scale - 1; i++ {
+	for i := 0; i < n - 1; i++ {
 		slave := GetSimNode()
 		lc = append(lc, *slave)
 	}
 
-	for i := 0; i < scale; i++ {
+	for i := 0; i < n; i++ {
 		RaiseNode(&lc[i])
 	}
 
@@ -95,7 +95,7 @@ func GetMasterNode(PORT int) *Node {
 	node = 0
 	var root Node
 	root.Id = node
-	root.Port = "0.0.0.0:"+strconv.Itoa(port)
+	root.Port = "localhost:"+strconv.Itoa(port)
 	root.Router = GetRouter()
 	return &root
 }
@@ -105,7 +105,7 @@ func GetSimNode() *Node {
 	port++
 	var p Node
 	p.Id = node
-	p.Port = "0.0.0.0:"+strconv.Itoa(port)
+	p.Port = "localhost:"+strconv.Itoa(port)
 	p.Router = GetRouter()
 	return &p
 }
