@@ -1,4 +1,4 @@
-package main
+package deepblue
 
 import (
 	"encoding/json"
