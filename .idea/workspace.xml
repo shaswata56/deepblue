@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="369f7202-8c81-4cdc-b5b0-a63940eafd3f" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/main.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/deepblue/deepblue.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" afterPath="$PROJECT_DIR$/main" afterDir="false" />
+>>>>>>> e33ed8186b9d5ac00f18767bd34729ce848ebc4f
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +64,11 @@
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/deepblue" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="deepblue" />
@@ -105,6 +116,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< HEAD
     <state x="414" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580976903705">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -135,8 +147,40 @@
     <state width="1876" height="159" key="GridCell.Tab.0.right/0.28.1920.1052@0.28.1920.1052" timestamp="1580534584735" />
     <state x="400" y="254" key="SettingsEditor" timestamp="1580912892691">
       <screen x="0" y="0" width="1920" height="1080" />
+=======
+    <state x="643" y="283" width="624" height="537" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1581638288974">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="643" y="283" width="624" height="537" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1581638288974" />
+    <state width="1876" height="228" key="GridCell.Tab.0.bottom" timestamp="1581655180729">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state width="1876" height="228" key="GridCell.Tab.0.bottom/0.28.1920.1052@0.28.1920.1052" timestamp="1581655180729" />
+    <state width="1876" height="228" key="GridCell.Tab.0.center" timestamp="1581655180728">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state width="1876" height="228" key="GridCell.Tab.0.center/0.28.1920.1052@0.28.1920.1052" timestamp="1581655180728" />
+    <state width="1876" height="228" key="GridCell.Tab.0.left" timestamp="1581655180728">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state width="1876" height="228" key="GridCell.Tab.0.left/0.28.1920.1052@0.28.1920.1052" timestamp="1581655180728" />
+    <state width="1876" height="228" key="GridCell.Tab.0.right" timestamp="1581655180728">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state width="1876" height="228" key="GridCell.Tab.0.right/0.28.1920.1052@0.28.1920.1052" timestamp="1581655180728" />
+    <state x="897" y="179" key="SettingsEditor" timestamp="1580243406205">
+      <screen x="0" y="28" width="1920" height="1052" />
+>>>>>>> e33ed8186b9d5ac00f18767bd34729ce848ebc4f
     </state>
     <state x="400" y="254" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1580912892691" />
     <state x="897" y="179" key="SettingsEditor/0.28.1920.1052@0.28.1920.1052" timestamp="1580243406205" />
+    <state x="492" y="154" width="924" height="785" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1581653390218">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="492" y="154" width="924" height="785" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.28.1920.1052@0.28.1920.1052" timestamp="1581653390218" />
+    <state x="589" y="330" width="732" height="444" key="git4idea.merge.GitPullDialog" timestamp="1581643550868">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="589" y="330" width="732" height="444" key="git4idea.merge.GitPullDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1581643550868" />
   </component>
 </project>
