@@ -19,6 +19,7 @@ type User struct {
 
 var userCSV []int
 var users	[]User
+var timeCount, currentLight string
 
 func randomIdGenerator(n int) []int {
 	var rands []int
@@ -38,7 +39,6 @@ func randomIdGenerator(n int) []int {
 				rands = append(rands, num)
 				break
 			}
-
 		}
 	}
 	return rands
@@ -51,9 +51,23 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/users", ConnectedUsers)
+	router.HandleFunc("/times", GetStatus)
 	router.HandleFunc("/user/{userId}", GetConnected)
 	router.HandleFunc("/user/{userId}/{newPoint}", ChangePoint)
+	router.HandleFunc("/time/{timeCount}/light/{currentLight}", SetStatus)
 	log.Fatal(http.ListenAndServe(":8080", router))
+}l
+
+func GetStatus(w http.ResponseWriter, _ *http.Request) {
+	_, _ = fmt.Fprint(w, timeCount+"."+currentLight)
+}
+
+func SetStatus(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	timeCount = vars["timeCount"]
+	currentLight = vars["currentLight"]
+	fmt.Print(timeCount+"."+currentLight)
+	_, _ = fmt.Fprint(w, "")
 }
 
 func ChangePoint(w http.ResponseWriter, r *http.Request) {
@@ -83,9 +97,9 @@ func GetConnected(w http.ResponseWriter, r *http.Request) {
 		str := strconv.Itoa(userCSV[i])
 		if userId == str {
 			conUser := User{
-				Id:    userId,
-				Connection:   true,
-				Point: 100,
+				Id:    			userId,
+				Connection:   	true,
+				Point: 			100,
 			}
 			checkExist := false
 			for j := 0; j < len(users); j++ {
